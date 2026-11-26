@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030814">
+  <link rel="icon" href="assets/chip.svg" type="image/svg+xml">
+  <title>Level Up — The AI PC Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-scan" aria-hidden="true"></div>
+
+  <button id="fullscreenBtn" class="hex hex-btn hex-btn--icon" aria-label="Toggle fullscreen" title="Fullscreen">
+    <span data-sprite="fullscreen"></span>
+  </button>
+
+  <main id="app">
+
+    <!-- 1. LANDING -->
+    <section class="screen is-active" id="screen-landing" data-font="pixel">
+      <div class="float-layer" aria-hidden="true"></div>
+      <div class="stack stack--center">
+        <div class="hero-chip" data-sprite="chip" aria-hidden="true"></div>
+        <p class="eyebrow">Intel® AI PC</p>
+        <h1 class="title-pixel">LEVEL<br><span>UP</span></h1>
+        <p class="lead-pixel">The AI PC Quest</p>
+        <button class="hex hex-btn hex-btn--xl" data-go="select">ENTER EXPERIENCE</button>
+        <p class="hint-pixel blink">Tap to start</p>
+      </div>
+    </section>
+
+    <!-- 2. GAME SELECT -->
+    <section class="screen" id="screen-select" data-font="pixel">
+      <div class="stack stack--center">
+        <h2 class="headline-pixel">See how Intel AI PCs can upgrade how you use your computer!</h2>
+        <div class="choice-list">
+          <button class="hex hex-btn hex-btn--choice bounce" data-mode="gaming" style="--i:0">
+            <span class="choice-ico" data-sprite="controller"></span><span class="choice-label">GAMING</span><span class="choice-done" data-sprite="check"></span>
+          </button>
+          <button class="hex hex-btn hex-btn--choice bounce" data-mode="work" style="--i:1">
+            <span class="choice-ico" data-sprite="briefcase"></span><span class="choice-label">WORK</span><span class="choice-done" data-sprite="check"></span>
+          </button>
+          <button class="hex hex-btn hex-btn--choice bounce" data-mode="learning" style="--i:2">
+            <span class="choice-ico" data-sprite="book"></span><span class="choice-label">LEARNING</span><span class="choice-done" data-sprite="check"></span>
+          </button>
+        </div>
+        <button id="nextBtn" class="hex hex-btn hex-btn--accent hex-btn--lg" data-go="quiz" hidden>NEXT &#9654;</button>
+      </div>
+    </section>
+
+    <!-- GAMING: TUTORIAL -->
+    <section class="screen" id="screen-tutorial" data-font="pixel">
+      <div class="stack stack--center">
+        <div class="hex hex-panel tutorial-panel">
+          <p class="eyebrow">How to play</p>
+          <p class="tutorial-text">You start with a <span class="dim">normal computer</span>.</p>
+          <p class="tutorial-text">Collect <span class="gold">coins</span> <span class="inline-sprite" data-sprite="coin"></span> to unlock <span class="hi">AI PC features!</span></p>
+          <div class="controls-hint">
+            <span class="key hex">&#9664;</span><span class="key hex">&#9654;</span><span>Steer to dodge &amp; collect</span>
+          </div>
+          <div class="progress hex"><div class="progress-fill" id="tutorialBar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAMING: 3D GAME -->
+    <section class="screen screen--game" id="screen-game" data-font="pixel">
+      <div id="gameRoot"></div>
+    </section>
+
+    <!-- GAMING: GAME OVER -->
+    <section class="screen" id="screen-gameover" data-font="pixel">
+      <div class="stack stack--center">
+        <h2 class="title-pixel title-pixel--md">GAME OVER</h2>
+        <p class="lead-pixel">You levelled up to an <span class="hi">AI PC!</span></p>
+        <div class="upgrade-list" id="upgradeList"></div>
+        <p class="stats-pixel" id="gameStats"></p>
+        <button class="hex hex-btn hex-btn--lg" data-go="select">CONTINUE &#9654;</button>
+      </div>
+    </section>
+
+    <!-- WORK / LEARNING PLACEHOLDER -->
+    <section class="screen" id="screen-placeholder" data-font="pixel">
+      <div class="stack stack--center">
+        <div class="hex hex-panel placeholder-panel">
+          <div class="placeholder-ico" id="placeholderIco"></div>
+          <h2 class="title-pixel title-pixel--md" id="placeholderTitle">WORK</h2>
+          <p class="lead-pixel">Coming soon</p>
+          <p class="hint-pixel">This quest is still being built.</p>
+        </div>
+        <button class="hex hex-btn hex-btn--lg" data-go="select">&#9664; BACK</button>
+      </div>
+    </section>
+
+    <!-- QUIZ (modern font from here on) -->
+    <section class="screen" id="screen-quiz" data-font="modern">
+      <div class="stack stack--center">
+        <p class="eyebrow">Find your AI PC</p>
+        <h2 class="headline">What do you use your PC for the most?</h2>
+        <p class="lead">Pick everything that applies.</p>
+        <div class="quiz-grid" id="quizGrid"></div>
+        <button id="finishBtn" class="hex hex-btn hex-btn--accent hex-btn--lg" disabled>Finish</button>
+      </div>
+    </section>
+
+    <!-- RECOMMENDATION -->
+    <section class="screen" id="screen-rec" data-font="modern">
+      <div class="stack stack--center stack--tight">
+        <img class="rec-chip" id="recImg" alt="">
+        <p class="eyebrow">Your AI PC match</p>
+        <h2 class="headline" id="recName"></h2>
+        <p class="lead" id="recTagline"></p>
+        <div class="tag-row" id="recTags"></div>
+        <div class="spec-grid" id="recSpecs"></div>
+        <div class="btn-row btn-row--split">
+          <button class="hex hex-btn hex-btn--lg" data-go="compare">See how it compares</button>
+          <button class="hex hex-btn hex-btn--accent hex-btn--lg" data-go="end">End experience</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section class="screen" id="screen-compare" data-font="modern">
+      <div class="stack stack--center stack--tight">
+        <p class="eyebrow">Head to head</p>
+        <div class="vs-head">
+          <div class="hex hex-panel vs-card vs-card--intel">
+            <img id="cmpIntelImg" alt="">
+            <span id="cmpIntelName"></span>
+          </div>
+          <div class="vs-badge">VS</div>
+          <div class="hex hex-panel vs-card vs-card--rival">
+            <img id="cmpRivalImg" alt="">
+            <span id="cmpRivalName"></span>
+          </div>
+        </div>
+        <div class="cmp-rows" id="cmpRows"></div>
+        <p class="lead" id="cmpVerdict"></p>
+        <div class="btn-row">
+          <button class="hex hex-btn hex-btn--lg" data-go="rec">&#9664; Back</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section class="screen" id="screen-end" data-font="modern">
+      <div class="stack stack--center">
+        <h2 class="headline headline--xl">Thank you for shopping with us!</h2>
+        <div class="hex hex-panel next-step">
+          <p class="eyebrow">Your next step</p>
+          <p class="next-step-text">Show this screen to a store associate to see your recommended PC</p>
+          <div class="next-step-chip">
+            <img id="endImg" alt="">
+            <strong id="endName"></strong>
+          </div>
+        </div>
+        <button class="hex hex-btn hex-btn--ghost" data-go="landing">Start over</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" crossorigin>
+  <script src="js/processors.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Secrets / local environment (never commit these)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor & OS clutter
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Tooling
+node_modules/
+.claude/
+CLAUDE.md
